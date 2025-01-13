@@ -63,42 +63,52 @@ const images = [
     description: 'Lighthouse Coast Sea',
 },
 ];
-//Додаємо фон на вікно
-const body = document.body;
-body.style.backgroundColor = "#F5F5F5";
+const style = document.createElement('style');
 
-//Додаємо img із об'єкта і стилізуємо
+style.textContent = `
+body {
+    background-color: #F5F5F5;
+}
+.gallery {
+    list-style: none;
+    padding: 24px 156px;
+    margin: 0 auto;
+    width: 1128px;
+    background-color: #FFF;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 48px 24px;
+}
+.gallery-image{
+    width: 360px;
+    height: 200px;
+}
+`;
+const head = document.querySelector('head');
+head.appendChild(style);
+
+
 for (const obj of images) {
     const ulList = document.querySelector('.gallery');
     const liItem = document.createElement('li');
     const linkA = document.createElement('a');
-    const imgA = document.createElement('img');
-
-    ulList.style.listStyle = 'none';
-    ulList.style.padding = "24px 156px";
-    ulList.style.margin = "0 auto";
-    ulList.style.width = "1128px";
-    ulList.style.backgroundColor = "#FFF";
-    ulList.style.display = "flex";
-    ulList.style.flexWrap = "wrap";
-    ulList.style.gap = "48px 24px";
+    const imgA = document.createElement('img');    
     liItem.classList.add('gallery-item');
     linkA.classList.add('gallery-link');
     linkA.setAttribute('href', "large-image.jpg");
+    imgA.setAttribute('data-num','atr');
     imgA.classList.add('gallery-image');
     imgA.src = `${obj.preview}`;
     imgA.alt = `${obj.description}`;
     imgA.dataset.source = `${obj.original}`;
-    imgA.addEventListener('click', (event) => { event.preventDefault() });
-    imgA.width = "360";
-    imgA.height = "200";
     ulList.append(liItem);
     liItem.appendChild(linkA);
     linkA.appendChild(imgA);
 }
 //Перевіряємо, чи натиснули на картинку і викликаємо модальне вікно (з допомогою завантаженої бібліотеки)
-    document.querySelector('.gallery').addEventListener('click', (event) => {
-if (event.target.tagName === 'IMG') {
+document.querySelector('.gallery').addEventListener('click', (event) => {
+    event.preventDefault();
+    if (event.target.tagName === 'IMG'&&event.target.dataset.num==='atr') {
     const largeImage = event.target.dataset.source;
-    basicLightbox.create(`<img src="${largeImage}" alt="${event.target.alt}" width="1112" height="640">`).show();}
+    basicLightbox.create(`<img src="${largeImage}" alt="${event.target.alt}">`).show();}
 });
